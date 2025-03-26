@@ -1,0 +1,15 @@
+<div class="posts-container">
+    @for (post of posts(); track post.id) {
+      <div class="post">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <app-like-dislike
+          [likeCount]="post.likeCount"
+          (like)="onLike(post)"
+          (dislike)="onDislike(post)"
+        />
+      </div>
+    } @empty {
+      <p>No posts are available at the moment. Please visit again.</p>
+    }
+</div>
