@@ -67,4 +67,27 @@ describe('PostsService', () => {
         const req = httpMock.expectOne('http://localhost:3000/posts');
         req.flush('Error fetching posts', { status: 500, statusText: 'Server Error' });
     });
+    it('should update a post and return the updated post', () => {
+        const postId = '1';
+        const likeCount = 10;
+        const updatedPost: IPost = {
+          id: postId,
+          title: 'Updated Post',
+          content: 'Updated content',
+          likeCount: likeCount
+        };
+    
+        // Call the service method
+        service.updatePost(postId, likeCount).subscribe(response => {
+          expect(response).toEqual(updatedPost); // Assert that the response matches the updatedPost
+        });
+    
+        // Mock the HTTP request
+        const req = httpMock.expectOne(`${service['BASE_URL']}/posts/${postId}`);
+        expect(req.request.method).toBe('PATCH'); // Ensure the HTTP method is PATCH
+        expect(req.request.body).toEqual({ likeCount }); // Assert the request body is correct
+    
+        // Respond with the mock data
+        req.flush(updatedPost); // Mock the response with the updated post data
+      });
 });
